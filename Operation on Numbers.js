@@ -1,0 +1,1 @@
+console.log(((number*3)+7)-10);
