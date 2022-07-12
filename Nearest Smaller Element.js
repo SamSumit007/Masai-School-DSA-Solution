@@ -30,44 +30,99 @@ Sample Output 1
 27 11 4 1 4 24 1 
 
 
-function NearestSmallerElem(arr,n){
-   let res = [];
-    for(let i=0; i<n; i++){
-        let ans=-1;//i take minus becz if both condn does not become treue it takes -1 by itself
-        let diff = n+1;
-        for(let j= i-1; j>=0; j--){
-            if(arr[j]<arr[i]){
-                ans = arr[j];
-                diff = i-j;
-                break;
-            }
-        }
-        //traversing the right side
-        for(let k=i+1; k<n; k++){
-            if(arr[k]<arr[i]){
-                let m = k-i;
-                if(m<diff){
-                    ans = arr[k];
-                    break
-                }
-            }
-        }
-     res.push(ans);
-    }
-    console.log(res.join(" "))
+function isEmpty(array) {
+    return array.length === 0 ? true : false;
 }
+
+
+function nearestGreaterElement(arr, size) {
+
+    var left = [];
+    var right = [];
+    var ans = [];
+    var stack = [];
+    var i = 0;
+   
+ 
+    while (i < size) {
+
+        while (!isEmpty(stack) && arr[stack[stack.length - 1]] >= arr[i]) {
+            stack.pop();
+        }
+        if (isEmpty(stack)) {
+            left[i] = -1;
+        }
+        else {
+            left[i] = stack[stack.length - 1];
+        }
+        stack.push(i);
+
+        i++;
+    }
+    
+     
+     i= size-1;
+
+ while (i >= 0) {
+
+        while (!isEmpty(stack) && arr[stack[stack.length - 1]] >= arr[i]) {
+            stack.pop();
+        }
+        if (isEmpty(stack)) {
+            right[i] = -1;
+        }
+        else {
+            right[i] = stack[stack.length - 1];
+        }
+        stack.push(i);
+
+        i--;
+    }
+    
+     
+    i = 0;
+    while (i < size) {
+
+        if (left[i] == -1 && right[i] == -1) {
+            ans.push(-1);
+        }
+        else if (left[i] == -1 && right[i] != -1) {
+            ans.push(arr[right[i]]);
+        }
+        else if (right[i] == -1 && left[i] != -1) {
+            ans.push(arr[left[i]]);
+        }
+        else {
+
+            let temp1 = Math.abs(i - left[i]);
+
+            let temp2 = Math.abs(i - right[i]);
+            ans.push(temp1 > temp2 ? arr[right[i]] : arr[left[i]]);
+        }
+
+        i++;
+    }
+
+    // console.log(left);
+    // console.log(right);
+   // console.log(ans);
+    console.log(ans.join(' '));
+
+
+}
+
 
 function runProgram(input){
  input= input.split("\n");
  var tc = +input[0];
  var line= 1;
  for(var i=0; i<tc; i++){
-     var n =+input[line++];
+     var size =+input[line++];
 var arr = input[line++].trim().split(" ").map(Number);
 
- //console.log(n, arr);
+ //console.log(size, arr);
 
- NearestSmallerElem(arr,n);
+  nearestGreaterElement(arr, size);
  }
 }
   
